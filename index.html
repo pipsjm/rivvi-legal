@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rivvi — Find a hit.</title>
+  <meta name="description" content="Organise pickleball sessions with your crew. Closed groups, rep scores, no-show accountability. Melbourne-born.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #030118;
+      --violet: #5418B8;
+      --magenta: #FF6EF7;
+      --text: #E8E4F0;
+      --text-muted: #8A82A0;
+      --card-bg: rgba(84, 24, 184, 0.08);
+      --card-border: rgba(84, 24, 184, 0.2);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* --- Ambient glow --- */
+    .glow {
+      position: fixed;
+      top: -30vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80vw;
+      height: 60vh;
+      background: radial-gradient(ellipse at center, rgba(84, 24, 184, 0.15) 0%, rgba(255, 110, 247, 0.05) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* --- Hero --- */
+    .hero {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem 3rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      background: linear-gradient(135deg, var(--violet) 20%, var(--magenta) 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 480px;
+      margin-bottom: 0;
+      font-weight: 400;
+    }
+
+    /* --- Features --- */
+    .features {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      padding: 2rem;
+      border-radius: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      transition: border-color 0.3s;
+    }
+
+    .feature-card:hover { border-color: rgba(255, 110, 247, 0.3); }
+
+    .feature-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .feature-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* --- How it works --- */
+    .how {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 2rem 2rem 6rem;
+      text-align: center;
+    }
+
+    .how h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      letter-spacing: -0.02em;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      text-align: left;
+    }
+
+    .step {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #fff;
+    }
+
+    .step-text h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .step-text p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* --- Footer --- */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--card-border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 600px) {
+      .hero { padding: 4rem 1.5rem 2rem; }
+      .features { padding: 2rem 1.25rem 4rem; }
+      .how { padding: 2rem 1.25rem 4rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+
+
+  <section class="hero">
+    <h1>Find a hit.</h1>
+    <p>Organise pickleball sessions with your crew. Closed groups, rep scores, no flakes.</p>
+
+  </section>
+
+  <section class="features" id="features">
+    <div class="feature-card">
+      <span class="feature-icon">🔒</span>
+      <h3>Closed groups</h3>
+      <p>Your sessions, your people. Hosts control who's in. No randos, no open discovery.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">⭐</span>
+      <h3>Rep scores</h3>
+      <p>Show up, earn trust. No-shows and late drops hit your rep. Reliable players rise to the top.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💸</span>
+      <h3>PayID payments</h3>
+      <p>Hosts set court costs. Players see who's paid at a glance. No more chasing money.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📋</span>
+      <h3>Waitlist & auto-join</h3>
+      <p>Session full? Jump on the waitlist. If a spot opens, you're in — with a 30-min grace window.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📌</span>
+      <h3>Host notes</h3>
+      <p>Pin updates to any session. Players get notified instantly — no group chat noise.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">👥</span>
+      <h3>Plus-ones</h3>
+      <p>Bring a mate. Their rep consequences route through you, so vouch wisely.</p>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <h4>Host creates a session</h4>
+          <p>Pick a venue, set the time, invite your group.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <h4>Players request to join</h4>
+          <p>Host approves who's in. Phone numbers revealed on acceptance.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <h4>Show up and play</h4>
+          <p>Session wraps, rep scores update. Reliable players build trust over time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://pipsjm.github.io/rivvi-legal/terms.html" target="_blank">Terms of Service</a>
+      <a href="https://pipsjm.github.io/rivvi-legal/privacy.html" target="_blank">Privacy Policy</a>
+      <a href="mailto:rivviapp@gmail.com">Contact</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 Rivvi. Made in Melbourne.</p>
+  </footer>
+</body>
+</html>
